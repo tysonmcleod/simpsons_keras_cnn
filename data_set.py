@@ -12,6 +12,7 @@ CATEGORIES = ["bart_simpson", "charles_montgomery_burns", "homer_simpson", "krus
 
 training_data = []
 
+# why??
 IMG_SIZE_WIDTH = 120
 IMG_SIZE_HEIGHT = 120
 
