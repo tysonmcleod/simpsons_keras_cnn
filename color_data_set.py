@@ -26,7 +26,7 @@ def create_training_data():
         for img in os.listdir(path):
             try:
                 # rgb 3 times grayscale
-                img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_GRAYSCALE)
+                img_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
                 # resize
                 new_array = cv2.resize(img_array, (IMG_SIZE_WIDTH, IMG_SIZE_HEIGHT))
                 training_data.append([new_array, class_num])
@@ -51,14 +51,14 @@ for features, label in training_data:
     y.append(label)
 
 # features can't be a list in Keras
-X = np.array(X).reshape(-1,IMG_SIZE_WIDTH,IMG_SIZE_HEIGHT,1) # -1 how many features do we have (catch all), shape of data, 1 --> grayscale
+X = np.array(X).reshape(-1,IMG_SIZE_WIDTH,IMG_SIZE_HEIGHT,3) # -1 how many features do we have (catch all), shape of data, 1 --> grayscale
 #y = np.array(y).reshape(-1,IMG_SIZE_WIDTH,IMG_SIZE_HEIGHT,1)
 
 # save data to not do it every time when tweaking the model
-pickle_out = open("X.pickle", "wb")
+pickle_out = open("X.dickle", "wb")
 pickle.dump(X, pickle_out)
 pickle_out.close()
 
-pickle_out = open("y.pickle", "wb")
+pickle_out = open("y.dickle", "wb")
 pickle.dump(y, pickle_out)
 pickle_out.close()

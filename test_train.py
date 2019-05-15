@@ -37,33 +37,27 @@ X = X/255.0
 model = keras.Sequential([
 
     ## c1
-    keras.layers.Conv2D(64, (3,3), input_shape=(120,120,1)),
+    keras.layers.Conv2D(32, (5,5), input_shape=(120,120,1)),
     keras.layers.Activation("relu"),
-    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
-    keras.layers.Dropout(0.2),
+    keras.layers.MaxPooling2D(pool_size=(2,2)),
 
     ## c2
-    keras.layers.Conv2D(128, (3,3)),
+    keras.layers.Conv2D(64, (3,3)),
     keras.layers.Activation("relu"),
-    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
-    keras.layers.Dropout(0.2),
+    keras.layers.MaxPooling2D(pool_size=(2,2)),
 
     ## c3
     keras.layers.Conv2D(128, (3,3)),
     keras.layers.Activation("relu"),
-    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
-    keras.layers.Dropout(0.2),
-
-    ## c4
-    keras.layers.Conv2D(64, (3,3)),
-    keras.layers.Activation("relu"),
-    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
-    keras.layers.Dropout(0.2),
+    keras.layers.MaxPooling2D(pool_size=(2,2)),
 
     # flatten for dense layers
     keras.layers.Flatten(),
     keras.layers.Dense(128, activation=tf.nn.relu),
-    keras.layers.Dense(10, activation=tf.nn.softmax)
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(64, activation=tf.nn.relu),
+    keras.layers.Dropout(0.5),
+    keras.layers.Dense(20, activation=tf.nn.softmax)
 
 
 ])
@@ -75,7 +69,7 @@ model = keras.Sequential([
 ### metrics -> used to monitor training and testing steps, this uses the fraction of images that are correctly classifeid
 
 model.compile(optimizer ='adam',
-              loss = 'sparse_categorical_crossentropy',
+              loss = 'categorical_crossentropy',
               metrics = ['accuracy'])
 
 # model summary
@@ -90,8 +84,97 @@ earlyStopping = keras.callbacks.EarlyStopping(monitor='val_loss', min_delta=0, p
 #mcSave = keras.callbacks.ModelCheckpoint('weights.{epochs:02d}.{val_loss:.2f}.hdf5', monitor='val_loss', verbose=0, save_best_only = True, mode='auto', period= 1)
 
 ## train with model.fit
-model.fit(X, y, batch_size = 32, epochs=10, callbacks=[earlyStopping],validation_split= 0.3)
+model.fit(X, y, batch_size = 32, epochs=20, callbacks=[earlyStopping],validation_split= 0.3)
 
 ## evaluate the accuracy
 #test_loss, test_acc = model.evaluate(y_train, y_test)
 #print('Test accuracy: ', test_acc)
+
+
+# model which always roughly 70-75%
+#'''
+#model = keras.Sequential([
+
+    ## c1
+##    keras.layers.Activation("relu"),
+#    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
+#    keras.layers.Dropout(0.2),
+
+    ## c2
+#    keras.layers.Conv2D(128, (3,3)),
+#    keras.layers.Activation("relu"),
+#    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
+#    keras.layers.Dropout(0.2),
+
+    ## c3
+#    keras.layers.Conv2D(128, (3,3)),
+#    keras.layers.Activation("relu"),
+#    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
+#    keras.layers.Dropout(0.2),
+
+    ## c4
+#    keras.layers.Conv2D(64, (3,3)),
+#    keras.layers.Activation("relu"),
+#    keras.layers.MaxPooling2D(pool_size=(2,2), strides=(2,2)),
+#    keras.layers.Dropout(0.2),
+
+    # flatten for dense layers
+#    keras.layers.Flatten(),
+#    keras.layers.Dense(128, activation=tf.nn.relu),
+#    keras.layers.Dense(10, activation=tf.nn.softmax)
+
+
+#])
+
+#'''
+
+
+'''
+75%
+    ## c1
+    keras.layers.ZeroPadding2D((1,1), input_shape=(120,120,1)),
+    keras.layers.Conv2D(64, (3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(64,(3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
+    keras.layers.Dropout(0.2),
+
+    ## c2
+
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(128, (3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(128,(3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
+    keras.layers.Dropout(0.2),
+
+    ## c3
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(128, (3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(128,(3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
+    keras.layers.Dropout(0.2),
+
+    ## c4
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(64, (3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.ZeroPadding2D((1,1)),
+    keras.layers.Conv2D(64,(3,3)),
+    keras.layers.Activation("relu"),
+    keras.layers.MaxPooling2D(pool_size=(3,3), strides=(2,2)),
+    keras.layers.Dropout(0.2),
+
+    # flatten for dense layers
+    keras.layers.Flatten(),
+    keras.layers.Dense(256, activation=tf.nn.relu),
+    keras.layers.Dropout(0.2),
+    keras.layers.Dense(128, activation=tf.nn.softmax)
+'''

@@ -106,3 +106,6 @@ venv.bak/
 .jpg
 /dataset
 *.pickle
+*.pre-pickle
+*.dickle
+*.vgg-dickle
